@@ -1,0 +1,131 @@
+<vbox vflex="true" hflex="true" viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.wxacc.AccMainMenuReplyEditCtrl')"
+	visible="@load(not empty vm.menu)">
+	<groupbox closable="false" mold="3d" vflex="true" hflex="true"
+		contentStyle="overflow:auto;border:solid 0px green">
+		<caption label="@load(c:cat3('菜单[',vm.menu.name,']响应消息'))">
+			<!-- <div class="btn-group">
+				<button label="编辑" iconSclass="z-icon-edit" sclass="btn-group btn-primary btn-xs"
+				onClick="@command('onClickReplyMsgEdit')" visible="@load(not vm.textReplyEditFlag)" />
+				<button label="取消" iconSclass="z-icon-close" sclass="btn-group btn-primary btn-xs"
+				onClick="@command('onClickReplyMsgCancel')" visible="@load(vm.textReplyEditFlag)" />
+				<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-primary btn-xs"
+				onClick="@command('onClickReplyMsgSave')" visible="@load(vm.textReplyEditFlag)" />
+				</div> -->
+		</caption>
+		<vbox id="vbox4MessageForm" hflex="true" align="start" pack="start" style="border:solid 0px blue">
+			<navbar mold="bs-pills" class="nav-justified" width="400px">
+				<navitem label="text文本消息" selected="@load('text' eq vm.respMessagForm.msgTypeStr)" class="btn-xs"
+					onClick="@command('onSelectMsgTypeText')" />
+				<navitem label="news图文消息" selected="@load('news' eq vm.respMessagForm.msgTypeStr)" class="btn-xs"
+					onClick="@command('onSelectMsgTypeNews')" />
+			</navbar>
+			<grid visible="@load('text' eq vm.respMessagForm.msgTypeStr)" sclass="simple-trans-grid" vflex="true"
+				width="400px" form="@id('fx') @load(vm.respMessagForm) @save(vm.respMessagForm,before='onClickTextMsgSave')">
+				<columns>
+					<column width="110px" align="right" />
+					<column align="left" />
+				</columns>
+				<rows>
+					<row>
+						<cell colspan="2">
+							<textbox hflex="true" value="@bind(fx.content)" multiline="true" rows="10" />
+						</cell>
+					</row>
+					<row>
+						<cell colspan="2" align="right">
+							<button label="保存" sclass="btn-group btn-primary btn-xs"
+								onClick="@command('onClickTextMsgSave',e=event)" />
+						</cell>
+					</row>
+				</rows>
+			</grid>
+			<vbox id="vboxNewsForms" visible="@load('news' eq vm.respMessagForm.msgTypeStr)"
+				style="border:solid 0px red">
+				<grid sclass="simple-trans-grid" vflex="true" width="400px"
+					form="@id('fx') @load(vm.mainArticle) @save(vm.mainArticle,before='onMainArticleSubmit')">
+					<columns>
+						<column width="110px" align="right" />
+						<column align="left" />
+					</columns>
+					<rows>
+						<row>
+							<label value="主标题" />
+							<textbox hflex="true" constraint="no empty" value="@bind(fx.title)"
+								readonly="@load(not vm.mainArticleEditFlag)" />
+						</row>
+						<row>
+							<label value="封面图片" />
+							<hlayout>
+								<image width="90px" height="90px" visible="@load(not empty fx.picUrl)" />
+								<button upload="true" label="选择图片..." onUpload="@command('uploadImage',e=event)"
+									disabled="@load(not vm.mainArticleEditFlag)" />
+							</hlayout>
+						</row>
+						<row>
+							<label value="主标题描述" />
+							<textbox hflex="true" value="@bind(fx.description)" multiline="true" rows="2"
+								readonly="@load(not vm.mainArticleEditFlag)" />
+						</row>
+						<row>
+							<label value="主标题链接" />
+							<textbox hflex="true" value="@bind(fx.url)" constraint="no empty"
+								readonly="@load(not vm.mainArticleEditFlag)" />
+						</row>
+						<row>
+							<cell colspan="2" align="right">
+								<button label="编辑" iconSclass="z-icon-edit" sclass="btn-group btn-primary btn-xs"
+									onClick="@command('onMainArticleEdit')" visible="@load(not vm.mainArticleEditFlag)" />
+								<button label="取消" iconSclass="z-icon-close" sclass="btn-group btn-danger btn-xs"
+									onClick="@command('onMainArticleCancel')" visible="@load(vm.mainArticleEditFlag)" />
+								<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-primary btn-xs"
+									onClick="@command('onMainArticleSubmit')" visible="@load(vm.mainArticleEditFlag)" />
+							</cell>
+						</row>
+						<row>
+							<cell colspan="2">
+								<button label="添加文章" iconSclass="z-icon-plus" sclass="btn-group btn-primary btn-xs"
+									hflex="true" onClick="@command('onClickAddMoreMessageForm')" disabled="@load(vm.mainArticleEditFlag)" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</vbox>
+		</vbox>
+	</groupbox>
+
+	<grid id="gridTemplate4MessageForm" visible="false" width="400px">
+		<columns>
+			<column width="110px" align="right" />
+			<column align="left" />
+		</columns>
+		<rows>
+			<row>
+				<label value="副标题" />
+				<textbox hflex="true" constraint="no empty" />
+			</row>
+			<row>
+				<label value="副标题封面图片" />
+				<hlayout>
+					<image width="90px" height="90px" visible="false" />
+					<button upload="true" label="选择图片..." disabled="true"/>
+				</hlayout>
+			</row>
+			<row>
+				<label value="副标题描述" />
+				<textbox hflex="true" readonly="true" multiline="true" rows="2" />
+			</row>
+			<row>
+				<label value="副标题链接" />
+				<textbox hflex="true" constraint="no empty" />
+			</row>
+			<row>
+				<cell colspan="2" align="right">
+					<button label="编辑" iconSclass="z-icon-edit" sclass="btn-group btn-primary btn-xs" />
+					<button label="删除" iconSclass="z-icon-edit" sclass="btn-group btn-danger btn-xs" />
+					<button label="取消" iconSclass="z-icon-close" sclass="btn-group btn-danger btn-xs" />
+					<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-primary btn-xs" />
+				</cell>
+			</row>
+		</rows>
+	</grid>
+</vbox>

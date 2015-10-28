@@ -1,0 +1,115 @@
+<zk>
+    <window id="measureWindow" vflex="true" hflex="true" contentStyle="padding:0; margin:0; " border="none"
+        apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('cn.rkang.merpap.ctrl.metadata.MeasureVarCtrl')">
+        <hbox vflex="true">
+            <grid id="mainGrid" emptyMessage="度量记录为空" model="@load(vm.measureList)" width="350px" vflex="true"
+                mold="paging" pageSize="20">
+                <columns>
+                    <column width="40px">序号</column>
+                    <column>名称</column>
+                    <column>code</column>
+                </columns>
+                <template name="model">
+                    <row forward="mainGrid.onDetailMeasure(${each.id})">
+                        <label value="${forEachStatus.index +1}" />
+                        <label value="${each.unitName}" />
+                        <label value="${each.unitCode}" />
+                    </row>
+                </template>
+            </grid>
+            <vbox width="500px">
+                <button iconSclass="z-icon-plus" label="新增" onClick="@command('onAddMeasureButton')" />
+                <groupbox mold="3d" hflex="true" closable="false" visible="@load(not empty vm.measureForm)">
+                    <caption label="基础信息" />
+                    <grid width="100%"
+                        form="@id('fx') @load(vm.measureForm) @save(vm.measureForm,before='onMeasureSubmit')">
+                        <columns>
+                            <column width="70px" align="right" />
+                            <column align="left" />
+                            <column width="70px" align="right" />
+                            <column align="left" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="名称" style="font-weight:bold" />
+                                <textbox hflex="true" value="@bind(fx.unitName)" constraint="no empty" readonly="@load(vm.editButton)"/>
+                                <label value="标准单位" style="font-weight:bold" />
+                                <textbox hflex="true" value="@bind(fx.unitCode)" constraint="no empty" readonly="@load(vm.editButton)"/>
+                            </row>
+                        </rows>
+                    </grid>
+                </groupbox>
+                <groupbox id="formGroupbox" mold="3d" hflex="true" closable="false"
+                    visible="@load(not empty vm.measureForm)">
+                    <caption label="单位换算" />
+                    <vlayout>
+                        <hbox hflex="true" pack="end">
+                            <button type="button" label="添加" iconSclass="z-icon-plus"
+                                onClick="@command('onAddDialect')" visible="@load(not vm.editButton)"/>
+                        </hbox>
+                        <grid model="@load(vm.dialectList)" width="100%">
+                            <columns>
+                                <column width="25%">名称</column>
+                                <column width="25%">标准单位</column>
+                                <column width="25%">转换系数</column>
+                                <column width="25%">操作</column>
+                            </columns>
+                            <template name="model">
+                                <row>
+                                    <label value="@load(each.unitName)" />
+                                    <label value="@load(each.unitCode)" />
+                                    <label value="@load(each.factor)" />
+                                    <cell>
+                                        <button iconSclass="z-icon-edit" forward="formGroupbox.onEditDialect(${each})" visible="@load(not vm.editButton)"/>
+                                        <button iconSclass="z-icon-times"
+                                            forward="formGroupbox.onDeleteDialect(${each})" visible="@load(not vm.editButton)"/>
+                                    </cell>
+                                </row>
+                            </template>
+                        </grid>
+                        <hbox hflex="true" pack="end">
+                            <button label="编辑" iconSclass="z-icon-edit"
+                                        visible="@load(vm.editButton)" onClick="@command('onEditForm')" />
+                            <button label="保存" iconSclass="z-icon-check" onClick="@command('onMeasureSubmit')"
+                                visible="@load(vm.saveButton)"/>
+                            <button label="删除" iconSclass="z-icon-trash-o" onClick="@command('onDelMeasureSubmit')"
+                                visible="@load(vm.delButton)"/>
+                        </hbox>
+                    </vlayout>
+                </groupbox>
+            </vbox>
+        </hbox>
+
+        <window id="dialectWin" border="none" width="500px" mode="overlapped" position="center,center"
+            visible="false">
+            <grid id="dialectGrid"
+                form="@id('fxx') @load(vm.varMerasureDialectForm) @save(vm.varMerasureDialectForm,before='dialectWinOnOk')">
+                <columns>
+                    <column align="right" />
+                    <column align="left" />
+                    <column align="right" />
+                    <column align="left" />
+                    <column align="right" />
+                    <column align="left" />
+                </columns>
+                <rows>
+                    <row height="50px">
+                        <label value="名称" />
+                        <textbox hflex="true" value="@bind(fxx.unitName)" constraint="no empty" />
+                        <label value="标准单位" />
+                        <textbox hflex="true" value="@bind(fxx.unitCode)" constraint="no empty" />
+                        <label value="转换系数" />
+                        <textbox hflex="true" value="@bind(fxx.factorStr)" constraint="@load(vm.const4Factor)" />
+                    </row>
+                    <row>
+                        <cell colspan="6" align="center" xmlns:h="http://www.zkoss.org/2005/zk/native">
+                            <button label="确定" iconSclass="z-icon-check" onClick="@command('dialectWinOnOk')" />
+                            <space />
+                            <button label="关闭" iconSclass="z-icon-times" onClick="@command('dialectWinOnCancel')" />
+                        </cell>
+                    </row>
+                </rows>
+            </grid>
+        </window>
+    </window>
+</zk>

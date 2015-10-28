@@ -1,0 +1,213 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window width="100%" viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.wxacc.AccMainCtrl')" vflex="true">
+		<borderlayout vflex="true">
+			<west width="360px" minsize="460" collapsible="true" splittable="false"
+				onOpen="@command('onOpenWest',e=event)" vflex="true" style="border: solid 0px blue">
+				<caption label="微信公众号配置" />
+
+				<vlayout id="wxAccBox" form="@id('fx') @load(vm.wxAccForm) @save(vm.wxAccForm,before='onAccFormSubmit')"
+					hflex="true" vflex="true" style="overflow-y:auto;border: solid 0px red">
+					<space height="5px" />
+					<groupbox mold="3d" closable="false" sclass="panel-primary">
+						<caption label="基本信息" style="font-weight:bold;">
+							<div class="btn-group">
+								<button label="编辑" iconSclass="z-icon-edit" onClick="@command('onAccBasicEdit')"
+									sclass="btn-group btn-primary btn-xs" visible="@load(not vm.accBasicEditFlag)" />
+								<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-danger btn-xs"
+									visible="@load(vm.accBasicEditFlag)" onClick="@command('onAccFormSubmit')" />
+								<button label="取消" iconSclass="z-icon-times" sclass="btn-group btn-primary btn-xs"
+									visible="@load(vm.accBasicEditFlag)" onClick="@command('onAccFormCancel')" />
+							</div>
+						</caption>
+
+						<grid width="320px" sclass="simple-trans-grid" vflex="true">
+							<columns>
+								<column align="right" />
+								<column width="210px" align="left" />
+							</columns>
+							<rows>
+								<row>
+									<label value="微信号" />
+									<vlayout>
+										<textbox value="@load(fx.accNo)" width="200px" readonly="true" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="微信号名称" />
+									<vlayout>
+										<textbox value="@bind(fx.accName)" width="200px"
+											readonly="@load(not vm.accBasicEditFlag)" constraint="no empty" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="机构名称" />
+									<vlayout>
+										<textbox value="@bind(fx.accOrgName)" width="200px" constraint=""
+											readonly="@load(not vm.accBasicEditFlag)" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="创建时间" />
+									<hlayout>
+										<textbox value="@load(fx.crtDate)" width="200px" constraint="" readonly="true" />
+									</hlayout>
+								</row>
+								<row>
+									<label value="最后更新时间" />
+									<vlayout>
+										<textbox value="@bind(fx.lastUpdate)" width="200px" constraint=""
+											readonly="true" />
+									</vlayout>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					<groupbox mold="3d" closable="false" sclass="panel-primary">
+						<caption label="接口配置" style="font-weight:bold;">
+							<div class="btn-group">
+								<button label="编辑" iconSclass="z-icon-edit" onClick="@command('onAccInterfaceEdit')"
+									sclass="btn-group btn-primary btn-xs" visible="@load(not vm.accInterfaceEditFlag)" />
+								<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-danger btn-xs"
+									visible="@load(vm.accInterfaceEditFlag)" onClick="@command('onAccFormSubmit')" />
+								<button label="取消" iconSclass="z-icon-times" sclass="btn-group btn-primary btn-xs"
+									visible="@load(vm.accInterfaceEditFlag)" onClick="@command('onAccFormCancel')" />
+							</div>
+						</caption>
+						<grid width="320px" sclass="simple-trans-grid">
+							<columns>
+								<column align="right" />
+								<column width="210px" align="left" />
+							</columns>
+							<rows>
+								<row>
+									<label value="AppId" />
+									<vlayout>
+										<textbox value="@load(fx.appId)" width="200px" readonly="true" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="AppSecret" />
+									<vlayout>
+										<textbox value="@load(fx.appSecret)" width="200px" readonly="true" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="URL服务器地址" />
+									<vlayout>
+										<textbox value="@bind(fx.url)" width="200px"
+											readonly="@load(not vm.accInterfaceEditFlag)" />
+									</vlayout>
+								</row>
+								<row>
+									<label value="TOKEN" />
+									<hlayout>
+										<textbox value="@bind(fx.token)" width="120px" constraint="no empty" />
+										<button label="随机生成" sclass="btn-info btn-xs" iconSclass="z-icon-gear"
+											visible="@load(vm.accInterfaceEditFlag))" onClick="@command('genRandomToken')" tooltiptext="@load(fx.token)" />
+									</hlayout>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					<groupbox mold="3d" closable="false" sclass="panel-primary">
+						<caption label="微支付接口配置" style="font-weight:bold;">
+							<div class="btn-group">
+								<button label="编辑" iconSclass="z-icon-edit" onClick="@command('onAccWxPayEdit')"
+									sclass="btn-group btn-primary btn-xs" visible="@load(not vm.accWxPayEditFlag)" />
+								<button label="保存" iconSclass="z-icon-save" sclass="btn-group btn-danger btn-xs"
+									visible="@load(vm.accWxPayEditFlag)" onClick="@command('onAccFormSubmit')" />
+								<button label="取消" iconSclass="z-icon-times" sclass="btn-group btn-primary btn-xs"
+									visible="@load(vm.accWxPayEditFlag)" onClick="@command('onAccFormCancel')" />
+							</div>
+						</caption>
+						<grid width="320px" sclass="simple-trans-grid">
+							<columns>
+								<column align="right" />
+								<column width="210px" align="left" />
+							</columns>
+							<rows>
+								<row>
+									<label value="商户编号" />
+									<vlayout>
+										<textbox value="@bind(fx.merchantNo)" width="200px" constraint=""
+											readonly="@load(not vm.accBasicEditFlag)" />
+										<!-- <label value="不能修改" style="color:red" /> -->
+									</vlayout>
+								</row>
+								<row>
+									<label value="支付密钥" />
+									<vlayout>
+										<textbox value="@bind(fx.merchantPayKey)" width="200px" constraint=""
+											readonly="@load(not vm.accBasicEditFlag)" />
+										<!-- <label value="不能修改" style="color:red" /> -->
+									</vlayout>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</vlayout>
+			</west>
+			<center>
+				<hlayout vflex="true">
+					<vbox vflex="true" spacing="2px">
+						<menupopup id="m1">
+							<menuitem label="新增" iconSclass="z-icon-plus" onClick="@command('onAddMenu')"
+								sclass="btn-xs" />
+							<menuitem label="发布到微信平台" iconSclass="z-icon-upload" onClick="@command('onReleaseMenu')"
+								sclass="btn-xs" tooltiptext="@load(vm.menuSychTimestamp)" />
+						</menupopup>
+
+						<groupbox mold="3d" closable="false" width="480px" vflex="true">
+							<caption label="菜单/关键字维护">
+								<div class="btn-group">
+									<button label="刷新" iconSclass="z-icon-refresh"
+										onClick="@command('onRefreshMenuTree')" sclass="btn-group btn-primary btn-xs" />
+									<button label="  " popup="m1" iconSclass="z-icon-ellipsis-h"
+										sclass="btn-group btn-danger btn-xs" />
+								</div>
+							</caption>
+							<tree model="@load(vm.menuTree)" vflex="true">
+								<treecols>
+									<treecol label="名称" width="170px" />
+									<treecol label="类型" width="100px" />
+									<treecol label="参数" width="" />
+								</treecols>
+								<template name="model">
+									<treeitem onClick="@command('onSelectTreeNode')" open="@load(each.data.open)"
+										selected="@load(each.data.selected)">
+										<treerow style="@load('click' eq each.data.value.typeStr ? 'cursor: help' : '')"
+											tooltiptext="@load('click' eq each.data.value.typeStr ? '点击查看对应的图文消息' : '')"
+											popup="@load('click' eq each.data.value.typeStr ? '' : 'popupAlertNotSupport')"
+											onRightClick="@command('onRightClickTreeMenu', paramEvent=event, data=each.data)"
+											onClick="@command('onDetailMenu',e=event,menu=each.data.value)"
+											onDoubleClick="@command('onDoubleClickMenu',menu=each.data.value)">
+											<treecell
+												iconSclass="@load(empty each.data.value.type ? 'z-icon-folder-open-o':'z-icon-book')"
+												label="@load(each.data.label)" />
+											<treecell label="@load(each.data.value.type)" />
+											<treecell label="@load(c:cat3(each.data.value.key,'',each.data.value.url))" />
+										</treerow>
+									</treeitem>
+								</template>
+							</tree>
+						</groupbox>
+					</vbox>
+
+					<!-- menu响应消息编辑区 -->
+					<include id="include4MenuDetail" hflex="true" vflex="true" />
+
+					<popup id="popupAlertNotSupport">
+						<html style="color:blue;"><![CDATA[ 不是click类型的menu，不支持detail操作！ ]]></html>
+					</popup>
+
+				</hlayout>
+			</center>
+		</borderlayout>
+		<menupopup id="menupopup">
+			<menuitem label="新增子菜单" iconSclass="z-icon-plus" onClick="@command('onAddSubMenu')" sclass="btn-xs" />
+			<menuitem label="上移" iconSclass="z-icon-arrow-up" onClick="@command('onMoveUpMenu')" sclass="btn-xs" />
+			<menuitem label="下移" iconSclass="z-icon-arrow-down" onClick="@command('onMoveDownMenu')" sclass="btn-xs" />
+		</menupopup>
+	</window>
+</zk>

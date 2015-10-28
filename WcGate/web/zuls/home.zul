@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page title="RKang微信网关" ?>
+<?link rel="shortcut icon" type="image/x-icon" href="/images/logo.png"?>
+<?link rel="icon" type="image/x-icon" href="/images/logo.png"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<style src="/css/fonts.css" />
+	<style src="/css/home.css" />
+	<style src="/css/tabbox.css" />
+	<style src="/css/button.css" />
+	<style>
+		<!-- 去掉最外层边框边距（只能直接在页面中定义，移到css中无效） -->
+		.topwin>div>.z-north,.topwin>div>.z-west,.topwin>div>.z-center,.topwin>div>.z-east { border: none; }
+
+		body { padding: 0 0; }
+	</style>
+
+	<window id="topWindow" contentStyle="padding:0; margin:0;" border="none" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.HomeCtrl')" vflex="true" hflex="true">
+		<borderlayout vflex="true" width="100%" sclass="topwin">
+			<!-- ~~~~~~~~~~~~~~~~~~~顶部导航栏~~~~~~~~~~~~~~~~~~~ -->
+			<north id="north" height="40px" splittable="false" collapsible="false">
+				<hbox align="center" hflex="true" height="40px" style="background:#545652;">
+					<space width="1px" />
+					<hbox sclass="topbar-title" width="165px">
+						<a id="ehsA" label="Rkang微信网关" vflex="min" hflex="true"
+							style="font-weight:bold;font-size:20px;color:#fff;text-decoration: none;" />
+					</hbox>
+					<space width="1px" />
+					<hbox spacing="0" height="40px" align="center" sclass="topmenu-hbox" hflex="true">
+						<a label="微信公众号控制台" iconSclass="z-icon-dashboard" onClick="@command('onClickTopmenu',e=event)"
+							sclass="topmenu-sel" />
+						<a label="后台监控" iconSclass="z-icon-line-chart" onClick="@command('onClickTopmenu',e=event)" />
+						<a label="系统配置" iconSclass="z-icon-gears" onClick="@command('onClickTopmenu',e=event)" />
+					</hbox>
+					<button sclass="btn-xs" iconSclass="z-icon-user" style="font-size:12px;" label="admin" />
+					<space width="1px" />
+					<button sclass="btn-xs" iconSclass="z-icon-bell" style="font-size:12px;" label="通知" />
+					<space width="1px" />
+					<hbox sclass="topbar-text" width="35px">
+						<a href="/login.html" label="退出" style="font-size:12px; color:#ffffff;white-space:nowarp"/>
+					</hbox>
+					<space width="1px" />
+				</hbox>
+			</north>
+			<!-- ~~~~~~~~~~~~~~~~~~~中部主显示区~~~~~~~~~~~~~~~~~~~ -->
+			<center>
+				<vlayout vflex="true" style="overflow:auto">
+					<include src="/zuls/wxAcc/wxAcc.zul" mode="auto" visible="true" hflex="true" vflex="true" />
+					<include src="/zuls/wxAcc/wxAcc.zul" mode="auto" visible="false" hflex="true" vflex="true" />
+					<include src="/zuls/wxAcc/wxAcc.zul" mode="auto" visible="false" hflex="true" vflex="true" />
+				</vlayout>
+			</center>
+			<south height="18px">
+				<vbox align="center" hflex="true">Copyright ©2015 Rkang All Rights Reserved.</vbox>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

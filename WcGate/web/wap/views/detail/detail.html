@@ -1,0 +1,18 @@
+<ion-view view-title="{{reportData.date.$date|date:'yyyy-MM-dd'}} {{reportData.name}}">
+  <ion-content>
+       <div ng-repeat="section in reportData.sections">
+          <ion-item class="item-stable"
+                    ng-click="toggleGroup(section)"
+                    ng-class="{active: isGroupShown(section)}">
+              <i class="icon" ng-class="isGroupShown(section) ? 'ion-minus' : 'ion-plus'"></i>
+            &nbsp;
+           	 {{section.name}}[{{section.records.length}}项]
+          </ion-item>
+          <ion-item class="item-accordion"
+                    ng-repeat="record in section.records"
+                    ng-show="isGroupShown(section)">
+            <span style="font-weight:bold">{{record.name}} </span>  {{record.value}} 
+          </ion-item>
+        </div>
+  </ion-content>
+</ion-view>

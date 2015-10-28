@@ -1,0 +1,152 @@
+/* 0 padding on top and bottom and 0 padding on right and left */
+body {
+	padding: 0 0;
+}
+
+/* 首页清爽布局：去掉border边框   .topwin.z-borderlayout div#wEvW4 div#wEvW4-real.z-north */
+.topwin>div>.z-north,.topwin>div>.z-west,.topwin>div>.z-center,.topwin>div>.z-east
+	{
+	border: none;
+}
+
+/* east深色产生阶梯效果，感觉更清晰 */
+.darkEast.z-east , .darkEast.z-east .z-caption{
+	background-color: #F3F7F7;
+}
+
+/* tab页签文字上提，默认的上下不居中贴地了 */
+/* .z-tab-text {
+	line-height: 18px;
+} */
+/* 去掉west收缩时左侧边距 */
+.z-west-collapsed {
+	padding-left: 0;
+}
+
+/* 右上角个人信息、退出按钮icon图标  */
+.admin-new,.msg-new,.logout-new {
+	background: url(../images/menu_ico_16.png) no-repeat;
+	width: 16px;
+	height: 16px;
+	display: block;
+	cursor: pointer;
+}
+
+.admin-new {
+	background-position: 0 0;
+}
+
+.msg-new {
+	background-position: -16px 0;
+}
+
+.logout-new {
+	background-position: -32px 0;
+}
+
+div.z-treecell-content span.mock-menu {
+	font-style: italic !important;
+	font-weight: bold !important;
+}
+
+/* a模拟顶层页签：首页、控制台…… */
+.topmenu-hbox td a {
+	color: #fff;
+	display: block;
+	font-size: 14px;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 10px;
+	text-decoration: none;
+	align: center;
+}
+
+.topmenu-hbox .topmenu-sel {
+	background-color: gray;
+	color: #000;
+	font-weight: bold;
+}
+
+.topmenu-hbox td a:hover,.topmenu-current {
+	background-color: gray;
+	color: #000;
+	font-weight: bold;
+}
+
+/* 首页导航栏 标题链接 */
+.topbar-title td a {
+	color: #fff;
+	display: block;
+	font-size: 20px;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 4px;
+	text-decoration: none;
+	align: center;
+}
+/* 首页导航栏 文字链接 */
+.topbar-text td a {
+	color: #fff;
+	display: block;
+	font-size: 14px;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 2px;
+	text-decoration: underline;
+	align: center;
+}
+
+/* risk任务，title底色蓝色的groupbox */
+.riskbox .z-groupbox-3d>.z-groupbox-header {
+	background: linear-gradient(to bottom, #009BC7 0%, #009BC7 100%) repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	color: #ffffff;
+}
+
+/* groupbox标题栏放置按钮，并且居右 */
+.z-caption-content {
+	float: left;
+	white-space: normal; /* 解决firefox下，caption中按钮换行问题 */
+	display: inline;
+}
+
+.z-caption-content div ,.z-caption-content div button {
+	float: right;
+}
+
+/* caption标题栏宽度撑开，以便放置按钮  */
+/* .caption-align-right .z-caption-content,.z-caption .z-label {
+	width: 100%;
+}
+
+.z-caption>*:first-child table {
+	width: 100%;
+} */
+.z-tabpanel {
+	padding: 2px;
+}
+
+.z-window-content {
+	padding: 2px;
+}
+
+/* 表单grid取消隔行换色  transparent跟pannel底色保持一致  */
+.simple-white-grid .z-row-inner,.simple-white-grid .z-cell,.simple-white-grid .z-row:hover>.z-row-inner,.simple-white-grid .z-row:hover>.z-cell{
+	background-color: transparent;
+}
+
+/* 无边框无底色的grid  */
+.simple-trans-grid {
+	border-style: none;
+}
+.simple-trans-grid .z-row-inner,.simple-trans-grid .z-cell,.simple-trans-grid .z-row:hover>.z-row-inner,.simple-trans-grid .z-row:hover>.z-cell{
+	background-color: transparent;
+}
+
+.blue-list-item.z-listitem > .z-listcell > .z-listcell-content ,.blue-list-item.z-listitem:hover > .z-listcell > .z-listcell-content{
+    color:blue;
+}
+
+.blue-row.z-row:hover > .z-row-inner > .z-row-content , .blue-row.z-row > .z-row-inner > .z-row-content{
+    color:blue;
+}

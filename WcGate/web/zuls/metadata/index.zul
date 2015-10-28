@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?><?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+    <style src="/css/fonts.css" />
+    <style src="/css/home.css" />
+    <style src="/css/tabbox.css" />
+
+    <window id="metadataTopWindow" vflex="true" hflex="true" contentStyle="padding:0; margin:0; " border="none"
+        apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('cn.rkang.merpap.ctrl.metadata.IndexCtrl')">
+        <borderlayout vflex="true"  hflex="true">
+            <west width="160px" splittable="true" collapsible="true">
+                <navbar orient="vertical" vflex="true" collapsed="false">
+                    <navitem label="标准体检项目配置" iconSclass="z-icon-gear blue">
+                        <custom-attributes url="/zuls/metadata/meItem.zul" />
+                    </navitem>
+                    <navitem label="定量计量单位配置" iconSclass="z-icon-gear blue">
+                        <custom-attributes url="/zuls/metadata/measureVar.zul" />
+                    </navitem>
+                    <navitem label="定性计量单位配置" iconSclass="z-icon-gear blue">
+                        <custom-attributes url="/zuls/metadata/measurePropDialect.zul" />
+                    </navitem>
+                    <navitem label="定时任务配置" iconSclass="z-icon-gear blue">
+                        <custom-attributes url="/zuls/metadata/scheduleJob.zul" />
+                    </navitem>
+                </navbar>
+            </west>
+
+            <center>
+                <vlayout width="100%" vflex="true" hflex="true">
+                    <tabbox id="mainTabbox" height="100%" vflex="true" hflex="true" width="100%" sclass="light-tabs">
+                        <tabs id="mainTabs" height="28px">
+                            <tab id="tab_home" label="Home" closable="false" iconSclass="z-icon-home blue" width="90px" height="35px"/>
+                        </tabs>
+                        <tabpanels id="mainTabpanels" height="100%" hflex="true">
+                            <tabpanel id="tabpanel_home" style="overflow:auto">
+                                <panel>
+                                    <panelchildren>
+                                        <hbox align="center" hflex="true" style="background-color:#F0F5F8;" height="100px">
+                                            <vbox hflex="true" align="center">
+                                                <label value="您正在访问MERPAP体检报告处理分析平台主数据配置模块，任何修改都会影响全局！" style="font-size:20px;" />
+                                            </vbox>
+                                        </hbox>
+                                    </panelchildren>
+                                </panel>
+                            </tabpanel>
+                        </tabpanels>
+                    </tabbox>
+                </vlayout>
+            </center>
+        </borderlayout>
+
+    </window>
+</zk>

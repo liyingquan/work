@@ -1,0 +1,66 @@
+<zk>
+    <window border="normal" vflex="true" hflex="true" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('cn.rkang.merpap.ctrl.metadata.MeasurePropDialectCtrl')">
+        <hbox vflex="true">
+            <grid id="listGrid" model="@load(vm.propMeasureDialectList)" mold="paging" width="350px" vflex="true"
+                pageSize="10" emptyMessage="结果为空">
+                <columns>
+                    <column width="40px">序号</column>
+                    <column>是否阳性</column>
+                    <column>方言</column>
+                    <column>备注</column>
+                </columns>
+                <template name="model">
+                    <row forward="listGrid.onDetailPropMeasureDialect(${each.id})">
+                        <label value="${forEachStatus.index +1}" />
+                        <label value="${each.positive}" />
+                        <label value="${each.name}"/>
+                        <label value="${each.memo}"/>
+                    </row>
+                </template>
+            </grid>
+            <vbox width="500px">
+                <button iconSclass="z-icon-plus" label="新增" onClick="@command('onAddMeasurePropDialectButton')" />
+                <groupbox closable="false" visible="@load(not empty vm.propMeasureDialectForm)" mold="3d">
+                    <caption label="维护信息" />
+                    <vlayout>
+                        <grid id="propMeasureDialectForm"
+                            form="@id('fm') @load(vm.propMeasureDialectForm) @save(vm.propMeasureDialectForm,before='onPropMeasureDialectSubmit')">
+                            <columns>
+                                <column width="70px" align="right" />
+                                <column align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <label value="是否阳性" style="font-weight:bold" />
+                                    <radiogroup selectedItem="@bind(fm.positive)">
+                                        <radio label="阳性" value="@load(true)" disabled="@load(vm.editButton)"/>
+                                        <radio label="阴性" value="@load(false)" disabled="@load(vm.editButton)"/>
+                                    </radiogroup>
+                                </row>
+                                <row>
+                                   <label value="方言" style="font-weight:bold" />
+                                   <textbox hflex="true" value="@bind(fm.name)" constraint="no empty" readonly="@load(vm.editButton)"/>
+                                </row>
+                                <row>
+                                    <label value="备注" style="font-weight:bold" />
+                                    <textbox rows="5" hflex="true" value="@bind(fm.memo)" readonly="@load(vm.editButton)"/>
+                                </row>
+                            </rows>
+                        </grid>
+                        <hbox hflex="true" pack="end">
+                            <button label="编辑" iconSclass="z-icon-check" onClick="@command('onEditSubmit')"
+                                visible="@load(vm.editButton)"/>
+                            <button label="保存" iconSclass="z-icon-check" onClick="@command('onPropMeasureDialectSubmit')"
+                                visible="@load(vm.saveButton)"/>
+                            <button label="删除" iconSclass="z-icon-trash-o" onClick="@command('onDelPropMeasureDialectSubmit')"
+                                visible="@load(vm.delButton)"/>
+                            <!-- <button label="取消" iconSclass="z-icon-times" onClick="@command('onPropMeasureDialectCancel')"
+                                visible="@load(empty vm.propMeasureDialectForm.id)"/> -->
+                        </hbox>
+                    </vlayout>
+                </groupbox>
+            </vbox>
+        </hbox>
+    </window>
+</zk>

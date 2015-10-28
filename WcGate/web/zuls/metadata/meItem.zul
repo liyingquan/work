@@ -1,0 +1,148 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window height="100%" width="100%" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('cn.rkang.merpap.ctrl.metadata.MeItemCtrl')" validationMessages="@id('vmsgs')">
+		<menupopup id="menupopup">
+			<menuitem label="新增项目" iconSclass="z-icon-plus" onClick="@command('onNewMeItem')" />
+			<menuitem label="编辑项目类别" iconSclass="z-icon-edit" onClick="@command('onEditCateg')" />
+		</menupopup>
+
+		<borderlayout>
+			<west width="280px" splittable="true" minsize="280">
+				<groupbox mold="3d" vflex="true" closable="false">
+					<caption>
+						<!-- <button label="新增检查项目" iconSclass="z-icon-plus" /> -->
+						<bandbox buttonVisible="true" autodrop="false" placeholder="智能查询"
+							onChanging="@command('onChangingSearchText',e=event)">
+						</bandbox>
+						<button label="新增类别" iconSclass="z-icon-plus" onClick="@command('onNewCateg')" />
+					</caption>
+					<tree model="@load(vm.treeModel)" vflex="true">
+						<template name="model">
+							<treeitem onClick="@command('onSelectTreeNode')" open="@load(each.data.open)"
+								selected="@load(each.data.selected)">
+								<treerow onRightClick="@command('openTreeMenu', paramEvent=event, data=each.data)"
+									onClick="@command('onDisplayMeItem',e=event,data=each.data)"
+									tooltiptext="${each.data.isItem ? '点击查看项目详情' : '右键菜单更多操作' }">
+									<treecell label="${c:cat3(each.data.label,'-',each.data.code)}"
+										style="@load(each.data.selected ? 'color:red' : '')" />
+								</treerow>
+							</treeitem>
+						</template>
+					</tree>
+				</groupbox>
+			</west>
+			<center>
+				<grid id="formGrid" width="500px" visible="@load(vm.meItemFormVisible)"
+					form="@id('fx') @load(vm.meItemForm) @save(vm.meItemForm,before='onMeItemFormSubmit')">
+					<columns>
+						<column width="50px" align="right" />
+						<column align="left" />
+						<column width="50px" align="right" />
+						<column align="left" />
+					</columns>
+					<rows>
+						<row>
+							<label value="名称" style="font-weight:bold" />
+							<vlayout>
+								<textbox value="@bind(fx.name)" readonly="@load(not vm.meItemFormEditing)"
+									constraint="@load(vm.const4MeItemName)" />
+								<label value="@load(vmsgs['name'])" style="color:red" />
+							</vlayout>
+							<label value="编码" style="font-weight:bold" />
+							<vlayout>
+								<textbox value="@bind(fx.code)" readonly="@load(not vm.meItemFormEditing)"
+									constraint="@load(vm.const4MeItemCode)" />
+								<label value="@load(vmsgs['code'])" style="color:red" />
+							</vlayout>
+						</row>
+						<row>
+							<label value="类型" style="font-weight:bold" />
+							<radiogroup selectedItem="@bind(fx.variatyNotProperty)">
+								<radio label="定量" value="@load(true)" disabled="@load(not vm.meItemFormEditing)" />
+								<radio label="定性" value="@load(false)" disabled="@load(not vm.meItemFormEditing)" />
+							</radiogroup>
+							<label value="计量" style="font-weight:bold" />
+							<cell>
+								<combobox disabled="@load(not vm.meItemFormEditing)" readonly="true"
+									model="@load(vm.varMeasureList)" constraint="@load(vm.const4MeasureVar)"
+									itemRenderer="cn.rkang.merpap.ctrl.metadata.ComboitemRenderer4MeasureVar" selectedItem="@bind(fx.varMeasureVo)"
+									visible="@load(fx.variatyNotProperty)">
+									<!--<comboitem label="KG|公斤" />
+										<comboitem label="mmhg|毫米汞柱" />
+										<comboitem label="mm|毫米" />
+										<comboitem label="c|摄氏度" /> -->
+								</combobox>
+							</cell>
+						</row>
+						<row>
+							<label value="描述" style="font-weight:bold" />
+							<cell colspan="3">
+								<textbox rows="5" value="@bind(fx.memo)" hflex="true"
+									readonly="@load(not vm.meItemFormEditing)" constraint="no empty" placeholder="描述不能为空" />
+							</cell>
+						</row>
+						<row>
+							<label value="别名" style="font-weight:bold" />
+							<cell colspan="3">
+								<vbox hflex="true" align="end">
+									<textbox rows="5" hflex="true" readonly="@load(not vm.meItemFormEditing)"
+										value="@bind(fx.aliasListStr)" />
+									<label value="每行代表一个别名" style="font-style:italic;color:red" />
+								</vbox>
+							</cell>
+						</row>
+						<row align="right">
+							<cell colspan="4" align="right">
+								<hbox hflex="true" pack="end">
+									<button label="编辑" iconSclass="z-icon-edit"
+										visible="@load(not vm.meItemFormEditing)" onClick="@command('onEditMeItemForm')" />
+									<button label="提交" iconSclass="z-icon-check" visible="@load(vm.meItemFormEditing)"
+										onClick="@command('onMeItemFormSubmit',form=formGrid)" />
+									<button label="取消" iconSclass="z-icon-times" visible="@load(vm.meItemFormEditing)"
+										onClick="@command('onMeItemFormCancel')" />
+								</hbox>
+							</cell>
+						</row>
+					</rows>
+
+				</grid>
+
+			</center>
+		</borderlayout>
+
+		<window id="meItemCategWin" border="none" width="500px" mode="overlapped" position="center,center"
+			visible="@load(vm.meItemCategFormVisible)">
+			<grid id="categGrid"
+				form="@id('fx2') @load(vm.meItemCategForm) @save(vm.meItemCategForm,before='onMeItemCategFormSubmit')">
+				<columns>
+					<column width="50px" align="right" />
+					<column align="left" />
+					<column width="50px" align="right" />
+					<column align="left" />
+				</columns>
+				<rows>
+					<row height="40px">
+						<label value="编码:" />
+						<vlayout>
+							<textbox hflex="true" value="@bind(fx2.code)" constraint="@load(vm.const4MeItemCalegCode)" />
+							<label value="@load(vmsgs['code'])" style="color:red" />
+						</vlayout>
+						<label value="名称:" />
+						<vlayout>
+							<textbox hflex="true" value="@bind(fx2.name)" constraint="@load(vm.const4MeItemCalegName)" />
+							<label value="@load(vmsgs['name'])" style="color:red" />
+						</vlayout>
+					</row>
+					<row>
+						<cell colspan="4" align="center" xmlns:h="http://www.zkoss.org/2005/zk/native">
+							<button label="确定" onClick="@command('onMeItemCategFormSubmit',form=categGrid)" />
+							<space />
+							<button label="取消" onClick="@command('onMeItemCategFormCancel')" />
+						</cell>
+					</row>
+				</rows>
+			</grid>
+		</window>
+	</window>
+</zk>

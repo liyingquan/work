@@ -1,0 +1,150 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+    <window height="100%" width="100%" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('cn.rkang.merpap.ctrl.metadata.ScheduleJobCtrl')" validationMessages="@id('vmsgs')">
+        <timer onTimer="@command('onTimerRefreshLogList')" delay="5000" repeats="true" />
+        <borderlayout>
+            <west splittable="false">
+                <vbox vflex="true">
+                    <grid id="scheduleJobGrid" emptyMessage="没有定时任务" model="@load(vm.scheduldJobList)" width="760px" height="339px">
+                        <columns>
+                            <column align="left" width="150px">任务名称</column>
+                            <column align="center" width="80px">任务状态</column>
+                            <column align="center" width="100px">时间表达式</column>
+                            <column align="left">任务执行类名称</column>
+                        </columns>
+                        <template name="model">
+                            <row tooltiptext="${each.description}" forward="scheduleJobGrid.onDetailJob(${each})" style="cursor:hand;cursor:pointer;">
+                                <label value="${each.jobName}" />
+                                <button label="${each.jobStatus.getText()}"
+                                    image="@load(each.jobIsRunning ?'/images/task_16_live.gif' :'')" />
+                                <label value="${each.cronExpression}" />
+                                <label value="${each.jobClassName}" />
+                            </row>
+                        </template>
+                    </grid>
+                    <grid emptyMessage="没有日志" model="@load(vm.allScheduldJobLogList)" width="760px"
+                        vflex="true" mold="paging" pageSize="20">
+                        <auxhead>
+                            <auxheader label="任务处理日志" colspan="6" />
+                        </auxhead>
+                        <columns>
+                            <column label="序号" width="40px" align="center" />
+                            <column label="任务名称" width="90px" align="center" />
+                            <column label="时间表达式" width="90px" align="center" />
+                            <column label="开始时间" width="150px" align="center" />
+                            <column label="下次执行时间" width="150px" align="center" />
+                            <column label="执行情况" />
+                        </columns>
+                        <template name="model">
+                            <row>
+                                <label value="${forEachStatus.index+1}" />
+                                <label value="${each.jobName}" />
+                                <label value="${each.cronExpression}" />
+                                <label value="${c:formatDate(each.fireTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                <label value="${c:formatDate(each.nextFireTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                <label value="${each.executionSummary}" />
+                            </row>
+                        </template>
+                    </grid>
+                </vbox>
+            </west>
+
+            <center>
+                <vbox id="scheduleJobForm" width="680px" visible="@load(vm.scheduleJobFormVisible)" vflex="true">
+                    <button label="新增任务" iconSclass="z-icon-plus" onClick="@command('onClickAddScheduleJob')"/>
+                    <grid
+                        form="@id('fx') @load(vm.scheduleJobForm) @save(vm.scheduleJobForm,before='onScheduleJobFormSubmit')" height="310px">
+                        <auxhead>
+                            <auxheader label="任务详情" colspan="4" />
+                        </auxhead>
+                        <columns>
+                            <column width="80px" align="right" />
+                            <column align="left" />
+                            <column width="80px" align="right" />
+                            <column align="left" />
+                        </columns>
+                        <rows>
+                            <row>
+                                <label value="任务名称" style="font-weight:bold" />
+                                <textbox value="@bind(fx.jobName)"
+                                    readonly="@load(not vm.scheduleJobDetailFormEditing)" />
+                                <label value="开始时间" style="font-weight:bold" />
+                                <timebox value="@bind(fx.fireTime)"
+                                    disabled="@load(not vm.scheduleJobDetailFormEditing)" />
+                            </row>
+                            <row>
+                                <label value="任务类" style="font-weight:bold" />
+                                <cell colspan="3">
+                                    <textbox cols="60" value="@bind(fx.jobClassName)"
+                                        readonly="@load(not vm.scheduleJobDetailFormEditing)" />
+                                </cell>
+                            </row>
+                            <row>
+                                <label value="时间配置" style="font-weight:bold" />
+                                <cell colspan="3">
+                                    <textbox cols="60" value="@bind(fx.cronExpression)"
+                                        readonly="@load(not vm.scheduleJobDetailFormEditing)" />
+                                </cell>
+                            </row>
+                            <row visible="@load(not vm.scheduleJobDetailFormEditing)">
+                                <cell colspan="4">
+                                    <hbox hflex="true">
+                                        <label value="修改任务状态：" />
+                                        <button label="@load(fx.jobIsRunning ?'暂停' :'启动')"
+                                            iconSclass="@load(fx.jobIsRunning ?'z-icon-pause' :'z-icon-play')"
+                                            onClick="@command('onPlayOrPauseScheduleJod')" />
+                                        <space />
+                                    </hbox>
+                                </cell>
+                            </row>
+                            <row>
+                                <label value="任务描述" style="font-weight:bold" />
+                                <cell colspan="3">
+                                    <textbox rows="5" value="@bind(fx.description)" hflex="true" placeholder="描述不能为空"
+                                        readonly="@load(not vm.scheduleJobDetailFormEditing)" />
+                                </cell>
+                            </row>
+
+                            <row align="right">
+                                <cell colspan="4" align="right">
+                                    <hbox hflex="true" pack="end">
+                                        <button label="编辑" iconSclass="z-icon-edit" disabled="@load(fx.jobIsRunning)"
+                                            visible="@load(not vm.scheduleJobDetailFormEditing)" onClick="@command('onScheduleJobFormEdit')" />
+                                        <button label="提交" iconSclass="z-icon-check"
+                                            visible="@load(vm.scheduleJobDetailFormEditing)" onClick="@command('onScheduleJobFormSubmit')" />
+                                        <button label="取消" iconSclass="z-icon-times"
+                                            visible="@load(vm.scheduleJobDetailFormEditing)" onClick="@command('onScheduleJobFormCancel')" />
+                                    </hbox>
+                                </cell>
+                            </row>
+                        </rows>
+                    </grid>
+
+                    <grid id="scheduleJobLogForm" emptyMessage="没有日志" model="@load(vm.scheduldJobLogList)" width="680px"
+                        vflex="true" mold="paging" pageSize="20" pagingPosition="bottom">
+                        <auxhead>
+                            <auxheader label="任务处理日志" colspan="5" />
+                        </auxhead>
+                        <columns>
+                            <column label="序号" width="40px" align="center" />
+                            <column label="时间表达式" width="90px" align="center" />
+                            <column label="开始时间" width="150px" align="center" />
+                            <column label="下次执行时间" width="150px" align="center" />
+                            <column label="执行情况" />
+                        </columns>
+                        <template name="model">
+                            <row>
+                                <label value="${forEachStatus.index+1}" />
+                                <label value="${each.cronExpression}" />
+                                <label value="${c:formatDate(each.fireTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                <label value="${c:formatDate(each.nextFireTime, 'yyyy/MM/dd HH:mm:ss')}" />
+                                <label value="${each.executionSummary}" />
+                            </row>
+                        </template>
+                    </grid>
+                </vbox>
+            </center>
+        </borderlayout>
+    </window>
+</zk>

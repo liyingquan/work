@@ -1,0 +1,14 @@
+<ion-view view-title="康有为-您的健康顾问" hide-back-button="true">
+  <ion-nav-buttons side="primary">
+    <button class="button" ng-click="openHelp($event)">关于</button>
+  </ion-nav-buttons>
+  <ion-content>
+    <div class="list card">
+      <div class="item  item-image item-icon-right" ui-sref="tabs.report">
+        <img ng-src="{{homeImage}}" style="height:330px;" />
+        <p class="item item-text-wrap bar-dark">{{'管理您的历年体检报告>>'}}</p>
+        <span class="icon ion-arrow-right-b"></span>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

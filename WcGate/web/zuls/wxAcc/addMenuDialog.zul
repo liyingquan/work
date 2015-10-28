@@ -1,0 +1,63 @@
+<zk>
+	<window apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.wxacc.AddMenuDialogCtrl')" validationMessages="@id('vmsgs')"
+		position="center,center" closable="false" sizable="false" maximizable="false" width="600px">
+		<vlayout spacing="5px" width="100%">
+			<groupbox hflex="true" closable="true" mold="3d"
+				form="@id('fx') @load(vm.formMenu) @save(vm.formMenu,before='onSaveMenu')">
+				<grid hflex="true">
+					<columns>
+						<column width="120px" align="right"></column>
+						<column></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="菜单名称：" />
+							<textbox hflex="true" value="@bind(fx.name)" focus="true" onOK="@command('onSaveMenu')" />
+						</row>
+						<row>
+							<label value="类型：" />
+							<radiogroup selectedItem="@bind(fx.typeStr)">
+								<radio label="菜单栏" iconSclass="z-icon-folder-open-o" value="folder"
+									visible="@load( (empty fx.parentId) and (empty fx.id))" />
+								<space width="5px" />
+								<radio label="View页面" iconSclass="z-icon-link" value="view"
+									visible="@load(empty fx.id or ('folder' ne fx.typeStr ))" />
+								<space width="5px" />
+								<radio label="Click事件" iconSclass="z-icon-hand-o-up" value="click"
+									visible="@load(empty fx.id or ('folder' ne fx.typeStr ))" />
+								<space width="5px" />
+								<radio label="扫码" iconSclass="z-icon-barcode" value="scancode_waitmsg"
+									visible="@load(empty fx.id or ('folder' ne fx.typeStr ))" />
+							</radiogroup>
+						</row>
+						<row visible="@load(fx.typeStr eq 'view')">
+							<label value="URL:" />
+							<textbox hflex="true" value="@bind(fx.url)" onOK="@command('onSaveMenu')" />
+						</row>
+						<row visible="@load(fx.typeStr eq 'click')">
+							<label value="Key:" />
+							<textbox hflex="true" value="@bind(fx.key)" onOK="@command('onSaveMenu')" />
+						</row>
+						<row>
+							<label value="备注:" />
+							<textbox width="98%" rows="4" />
+						</row>
+						<row>
+							<cell align="left">
+								<button label="取消" iconSclass="z-icon-close" sclass="btn-xs"
+									onClick="@command('onCancel')" />
+							</cell>
+							<cell align="right">
+								<button label="删除" iconSclass="z-icon-close" sclass="btn-danger btn-xs"
+									onClick="@command('onDeleteMenu')" />
+								<button label="提交" iconSclass="z-icon-check" sclass="btn-primary btn-xs"
+									onClick="@command('onSaveMenu')" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

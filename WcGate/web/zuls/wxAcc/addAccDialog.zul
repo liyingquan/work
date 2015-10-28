@@ -1,0 +1,53 @@
+<zk>
+	<window title="新建公众号" viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.wxacc.AddAccDialogCtrl')"
+		position="center,center" closable="false" sizable="false" maximizable="false" width="600px">
+		<vlayout spacing="5px" width="100%">
+			<groupbox hflex="true" closable="true" mold="3d"
+				form="@id('fx') @load(vm.form) @save(vm.form,before='onSave')">
+				<grid hflex="true">
+					<columns>
+						<column width="120px" align="right"></column>
+						<column></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="微信号名称" />
+							<textbox hflex="true" value="@bind(fx.accName)" focus="true" constraint="no empty"
+								onOK="@command('onSave')" />
+						</row>
+						<row>
+							<label value="微信号" />
+							<textbox hflex="true" value="@bind(fx.accNo)" constraint="no empty"
+								onOK="@command('onSave')" />
+						</row>
+						<row>
+							<label value="机构名称" />
+							<textbox hflex="true" value="@bind(fx.accOrgName)" constraint="no empty"
+								onOK="@command('onSave')" />
+						</row>
+						<row>
+							<label value="AppId" />
+							<textbox hflex="true" value="@bind(fx.appId)" constraint="no empty"
+								onOK="@command('onSave')" />
+						</row>
+						<row>
+							<label value="AppSecret" />
+							<textbox hflex="true" value="@bind(fx.appSecret)" constraint="no empty"
+								onOK="@command('onSave')" />
+						</row>
+						<row>
+							<cell align="left">
+								<button label="取消" iconSclass="z-icon-close" sclass="btn-xs"
+									onClick="@command('onCancel')" />
+							</cell>
+							<cell align="right">
+								<button label="提交" iconSclass="z-icon-check" sclass="btn-primary btn-xs"
+									onClick="@command('onSave')" />
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</vlayout>
+	</window>
+</zk>

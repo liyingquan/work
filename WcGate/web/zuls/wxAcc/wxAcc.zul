@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?><?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<style src="/css/fonts.css" />
+	<style src="/css/home.css" />
+	<style src="/css/tabbox.css" />
+
+	<window id="wxAccWin" vflex="true" hflex="true" contentStyle="padding:0; margin:0; " border="none"
+		viewModel="@id('vm') @init('cn.rkang.wxgate.ctrl.wxacc.WxAccCtrl')">
+		<borderlayout vflex="true" hflex="true">
+			<west width="160px" splittable="true" collapsible="true">
+				<navbar hflex="true" orient="vertical" vflex="true" collapsed="false" mold="default"
+					children="@load(vm.wxAccList)">
+					<template name="children" var="each">
+						<navitem label="@load(each.accName)" iconSclass="z-icon-wechat"
+							onClick="@command('onClickWxAccNavItem',e=event,appId=each.appId)">
+						</navitem>
+					</template>
+				</navbar>
+			</west>
+
+			<center>
+				<vlayout vflex="true" hflex="true">
+					<tabbox id="mainTabbox" vflex="true" hflex="true" sclass="light-tabs">
+						<tabs id="mainTabs" height="28px">
+							<tab id="tab_home" label="Home" closable="false" iconSclass="z-icon-home blue" width="90px"
+								height="35px" />
+						</tabs>
+						<toolbar>
+							<button label="新建微信公众号" iconSclass="z-icon-plus" sclass="btn-primary btn-sm"
+								onClick="@command('onNewWxAccDialog')" />
+						</toolbar>
+						<tabpanels id="mainTabpanels" height="100%" hflex="true">
+							<tabpanel id="tabpanel_home" style="overflow:auto">
+								<panel>
+									<panelchildren>
+										<hbox align="center" hflex="true" style="background-color:#F0F5F8;"
+											height="100px">
+											<vbox hflex="true" align="center">
+												<label value="您正在访问公众号控制台，任何修改都会影响到该号的运行！" style="font-size:20px;" />
+											</vbox>
+										</hbox>
+									</panelchildren>
+								</panel>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</vlayout>
+			</center>
+		</borderlayout>
+
+	</window>
+</zk>
